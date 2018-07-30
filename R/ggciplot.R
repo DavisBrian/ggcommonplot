@@ -2,6 +2,22 @@ library(tidyverse)
 library(scales)
 library(rlang)
 
+# TBD
+# -    Function for labels
+# -    Legend
+# -    rotate x/y text
+# -    y-axis to the top
+# -    commas, $, % in axis labels
+# Error bar
+# -    ???
+# Points
+# -    implement fill
+# -    implement shape (based on group)
+# -    If the error bars are not based on group be able to change the point color based on group
+# Bars 
+# -    Change bar color based on group outline should be same color as bar
+# Lines
+# -    ???
 
 # trademark lookup -------------------------------------------------------------
 
@@ -208,43 +224,78 @@ colors3 <- c("use" = "black", "nmu" = "purple")
 
 
 # Test just error bar ----------------------------------------------------------
+# http://sape.inf.usi.ch/quick-reference/ggplot2/geom_errorbar
+# dodge_width = 0.75
+# errorbar.size = 0.5
+# errorbar.linetype = 1    http://sape.inf.usi.ch/quick-reference/ggplot2/linetype
+# errorbar.color = "black"
+# errorbar.width = 0.5
+# errorbar.alpha = 1
+
+## Basic error bar plot
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type)
+
+## Change the color to red
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+         errorbar.color = "red")
+
+## Change the color based on group
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+         errorbar.color = colors1)
 
 
 # Test error bar + point -------------------------------------------------------
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type)
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
-       point.color = "red", point.size = 3)
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
-       point.color = "green", point.size = 3,
-       errorbar.color = colors2)
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
-       point.size = 2,
-       errorbar.color = colors1)
 
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
-       point.color = colors3, point.size = 3)
+## Point the same color as error bar
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         point = TRUE, point.size = 2,
+         errorbar.color = "red")
 
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
-       point.color = c("use" = "grey", "nmu" = "cornflowerblue"), point.size = 3,
-       errorbar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
-       xlab = "", ylab = "Prevalence % (95% CI)")
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         point = TRUE, point.size = 2,
+         errorbar.color = colors1)
+
+## Change the point color to "red" and increase the size
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         point = TRUE, point.color = "red", point.size = 3)
+
+## Change the error bar color based on group and set the point to a differnt color
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         errorbar.color = colors1,
+         point = TRUE, point.color = "green", point.size = 3)
+
+## [TBD] If the error bars are not based on group be able to change the point color based on group
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+       point.color = colors3, point.size = 3, errorbar.color = "red")
+
+# Basic shape change (2 = unfilled triangle)
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+         point.color = colors3, point.size = 3, point.shape = 2)
+
+## [TBD] Change shape based on named vector
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+         point.color = colors3, point.size = 3, point.shape = c("use" = 1, "nmu" = 2))
+
 
 # Test Bar plot ----------------------------------------------------------------
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, bar = TRUE, group = use_type)
+
+## Basic bar plot (error bar should be over the bars)
 ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
-       bar = TRUE, xlab = "", ylab = "Prevalence % (95% CI)")
+       bar = TRUE)
+
+## [TBD] Change bar color based on group outline should be same color as bar
 ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
-       bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
-       bar.outline = "black", bar.alpha = .75,
-       xlab = "", ylab = "Prevalence % (95% CI)")
+         bar = TRUE, bar.color = colors1)
+
+## Change bar color based on group outline in different color
 ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
-       bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
-       xlab = "", ylab = "Prevalence % (95% CI)")
+         bar = TRUE, bar.color = colors1,
+         bar.outline = "black", bar.alpha = .75)
+
+## Change error bar and bar color based on group separately
 ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
-       bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
-       bar.outline = "black", bar.alpha = .75,
-       errorbar.color = c("use" = "red", "nmu" = "green"),
-       xlab = "", ylab = "Prevalence % (95% CI)")
+       bar = TRUE, bar.color = colors1, bar.outline = "black", bar.alpha = .75,
+       errorbar.color = colors2)
 
 ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),

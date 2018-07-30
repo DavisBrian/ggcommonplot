@@ -46,7 +46,7 @@ use_type <- tribble(
 # linetype
 # x/y label
 # http://sape.inf.usi.ch/quick-reference/ggplot2/size
-ciplot <- function(data,
+ggciplot <- function(data,
                    x, 
                    y, 
                    ymin, 
@@ -207,64 +207,75 @@ colors2 <- c("use" = "red", "nmu" = "blue")
 colors3 <- c("use" = "black", "nmu" = "purple")
 
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+# Test just error bar ----------------------------------------------------------
+
+
+# Test error bar + point -------------------------------------------------------
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type)
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
        point.color = "red", point.size = 3)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
        point.color = "green", point.size = 3,
        errorbar.color = colors2)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
        point.size = 2,
        errorbar.color = colors1)
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, point = TRUE, group = use_type,
        point.color = colors3, point.size = 3)
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        point.color = c("use" = "grey", "nmu" = "cornflowerblue"), point.size = 3,
        errorbar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        xlab = "", ylab = "Prevalence % (95% CI)")
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, bar = TRUE, group = use_type)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+# Test Bar plot ----------------------------------------------------------------
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, bar = TRUE, group = use_type)
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, xlab = "", ylab = "Prevalence % (95% CI)")
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        bar.outline = "black", bar.alpha = .75,
        xlab = "", ylab = "Prevalence % (95% CI)")
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        xlab = "", ylab = "Prevalence % (95% CI)")
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        bar.outline = "black", bar.alpha = .75,
        errorbar.color = c("use" = "red", "nmu" = "green"),
        xlab = "", ylab = "Prevalence % (95% CI)")
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        bar.outline = "black", bar.alpha = .75,
        errorbar.color = "red",
        xlab = "", ylab = "Prevalence % (95% CI)")
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        bar.outline = "black", bar.alpha = .75,
        errorbar.color = c("use" = "grey", "nmu" = "cornflowerblue"),
        xlab = "", ylab = "Prevalence % (95% CI)")
 
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type, 
        bar = TRUE, bar.color = bar_colors <- c("use" = "grey", "nmu" = "cornflowerblue"),
        bar.outline = "black", bar.alpha = .75,
        xlab = "", ylab = "Prevalence % (95% CI)")
 
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, line = TRUE)
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, line = TRUE)
+
+# Test Lines -------------------------------------------------------------------
 
 
-ciplot(dat4, x = name, y = mean, ymin = lower, ymax = upper)
-ciplot(dat3, x = name, y = mean, ymin = lower, ymax = upper)
-ciplot(dat2, x = name, y = mean, ymin = lower, ymax = upper)
-ciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper)
+
+# Test Point + Lines -----------------------------------------------------------
+
+
+
+
+# Lables -----------------------------------------------------------------------
+
+
+# Legend -----------------------------------------------------------------------

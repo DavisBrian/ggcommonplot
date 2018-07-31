@@ -315,11 +315,27 @@ ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
        bar.outline = "black", bar.alpha = .75,
        xlab = "", ylab = "Prevalence % (95% CI)")
 
-ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, line = TRUE)
+
 
 # Test Lines -------------------------------------------------------------------
 
+## Basic Line test
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         line = TRUE)
 
+## Basic line test + points
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         line = TRUE, point = TRUE, point.size = 2)
+
+## Basic line test + points + color based on group
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         errorbar.color = colors1,
+         line = TRUE, point = TRUE, point.size = 2)
+
+## Basic line test + points + color based on group + change linetype based on group
+ggciplot(dat1, x = name, y = mean, ymin = lower, ymax = upper, group = use_type,
+         errorbar.color = colors1,
+         line = TRUE, point = TRUE, point.size = 2)
 
 # Test Point + Lines -----------------------------------------------------------
 

@@ -13,6 +13,41 @@ colors3 <- c("use" = "black", "nmu" = "purple")
 
 shape1 <- c("use" = 16, "nmu" = 17)
 
+api_colors <- c(Oxycodone        = "#000080",
+                Fentanyl         = "#00FF00",
+                Codeine          = "#CD5B45",
+                Hydrocodone      = "#FF0000",
+                Hydromorphone    = "#FF00FF",
+                Morphine         = "#800080",
+                Oxymorphone      = "#000000",
+                Methadone        = "#00CCFF",
+                Buprenorphine    = "#FF9900",
+                Tramadol         = "#808080",
+                Tapentadol       = "#817D00",
+                Methylphenidate  = "#00FF00",
+                Amphetamines     = "#FF9900",
+                Ketamine         = "#458B00",
+                Schedule2        = "#458B00",
+                ADF              = "turquoise",
+                NonADF           = "#660000")
+
+api_lines <- c(Oxycodone        = 1,
+               Fentanyl         = 2,
+               Codeine          = 3,
+               Hydrocodone      = 4,
+               Hydromorphone    = 5,
+               Morphine         = 6,
+               Oxymorphone      = 1,
+               Methadone        = 2,
+               Buprenorphine    = 3,
+               Tramadol         = 4,
+               Tapentadol       = 5,
+               Methylphenidate  = 6,
+               Amphetamines     = 1,
+               Ketamine         = 2,
+               Schedule2        = 3,
+               ADF              = 4,
+               NonADF           = 5)
 
 # Error Bar --------------------------------------------------------------------
 ggerrorbar(dat, x = name, estimate = mean, ymin = lower, ymax = upper, group = use_type)
@@ -73,3 +108,32 @@ ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = us
            point = TRUE, point.size = 2L, point.color = colors1, point.shape = shape1, point.shapegroup = use_type)
 
 # Error Bar + Point + Line -----------------------------------------------------
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L,
+           line  = TRUE)
+
+## change point.color by api color, line.color should follow
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = api_colors,
+           line  = TRUE)
+
+## change point.color by api color, line.color should follow
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = "blue",
+           line  = TRUE)
+
+## change point color by api color, line.color to blue
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = api_colors,
+           line  = TRUE, line.color = "blue")
+
+## change point color to red, line.color to blue
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = "red",
+           line  = TRUE, line.color = "blue")
+
+## change point.color by api color, line.color should follow, change linetype based on group
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = api_colors,
+           line  = TRUE, line.linetypegroup = name, line.linetype = api_lines)
+

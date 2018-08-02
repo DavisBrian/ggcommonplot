@@ -18,11 +18,16 @@ ggerrorbar <- function(data,
                      bar.alpha = 1,
                      point.size = 0.5,
                      point.shape = 16,
-                     point.shapegroup = NULL,      # not implemented
+                     point.shapegroup = NULL,      
                      point.color = errorbar.color,
                      point.fill = NA,
                      point.alpha = 1,
                      point.na_remove = FALSE,
+                     line.linetypegroup = NULL,
+                     line.color = point.color,
+                     line.linetype = "solid",
+                     line.alpha = 1,
+                     line.size  = .5,
                      xlab = NULL,
                      ylab = NULL,
                      caption = NULL,
@@ -39,6 +44,7 @@ ggerrorbar <- function(data,
   
   group_quo <- rlang::enquo(group)
   shape_quo <- rlang::enquo(point.shapegroup)
+  ltype_quo <- rlang::enquo(line.linetypegroup)
   
   # preparing x/y labels from given dataframe ----------------------------------
   lab.df <- colnames(dplyr::select(
@@ -59,8 +65,12 @@ ggerrorbar <- function(data,
   
   # prepare the named vectors --------------------------------------------------
   errorbar_color_named <- !is.null(names(errorbar.color))
+  
   point_color_named    <- !is.null(names(point.color)) 
   point_shape_named    <- !is.null(names(point.shape))
+  
+  line_color_named     <- !is.null(names(line.color))
+  linetype_named       <- !is.null(names(line.linetype))
   
   # Plot Set up ----------------------------------------------------------------
   p <- ggplot2::ggplot(data,
@@ -75,7 +85,7 @@ ggerrorbar <- function(data,
     
   # Error Bar ------------------------------------------------------------------
   # if the a named vector is used for the errorbar.color use scale_color_manual
-  if(errorbar_color_named) {
+  if (errorbar_color_named) {
     p <- p + ggplot2::geom_errorbar(aes(ymin  = !! ymin_quo, 
                                         ymax  = !! ymax_quo,
                                         color = !! group_quo),
@@ -100,7 +110,7 @@ ggerrorbar <- function(data,
   # should be able to set the points a constant color and the errorbar by group
   # and the errorbar to a constant color and the points by the grouping variable
   # 
-  if(point) {
+  if (point) {
     if (point_color_named & point_shape_named) {
       p <- p + ggplot2::geom_point(aes(y     = !!est_quo,
                                        color = !!group_quo,
@@ -138,14 +148,61 @@ ggerrorbar <- function(data,
     }
   }
   
-  if(errorbar_color_named) {
-    p <- p + ggplot2::scale_color_manual(values=errorbar.color)
-  } else if (length(errorbar.color) == 1L & point_color_named) {
-    p <- p + ggplot2::scale_color_manual(values=point.color)
+  # Line ---------------------------------------------------------------------
+  # line.color should default to the same as errorbar.color.  Also, 
+  # should be able to set the lines to a constant color and the errorbar by group
+  # and the errorbar to a constant color and the lines by the grouping variable
+  # 
+  if (line) {
+    if (line_color_named & linetype_named) {
+      p <- p + ggplot2::geom_line(aes(y        = !!est_quo,
+                                      color    = !!group_quo,
+                                      linetype = !!ltype_quo),
+                                   position = position_dodge(dodge_width),
+                                   size     = line.size,
+                                   alpha    = line.alpha)
+    } else if (line_color_named & !linetype_named) {
+      p <- p + ggplot2::geom_line(aes(y     = !!est_quo,
+                                      color = !! group_quo),
+                                  position = position_dodge(dodge_width),
+                                  size     = line.size,
+                                  linetype = line.linetype,
+                                  alpha    = line.alpha)
+    } else if (!line_color_named & linetype_named) {
+      p <- p + ggplot2::geom_line(aes(y        = !!est_quo,
+                                      color    = !!group_quo,
+                                      linetype = !!ltype_quo),
+                                   position = position_dodge(dodge_width),
+                                   size     = line.size,
+                                   color    = line.color,
+                                   alpha    = line.alpha) 
+    } else {
+      p <- p + ggplot2::geom_line(aes(y     = !!est_quo,
+                                      color = !! group_quo),
+                                   position = position_dodge(dodge_width),
+                                   size     = line.size,
+                                   color    = line.color,
+                                   linetype = line.linetype,
+                                   alpha    = line.alpha)
+    }
+    
   }
   
-  if(point_shape_named) {
+  
+  if (errorbar_color_named) {
+    p <- p + ggplot2::scale_color_manual(values = errorbar.color)
+  } else if (length(errorbar.color) == 1L & point_color_named) {
+    p <- p + ggplot2::scale_color_manual(values = point.color)
+  } else if (length(errorbar.color) == 1L & line_color_named) {
+    p <- p + ggplot2::scale_color_manual(values = line.color)
+  }
+  
+  if (point_shape_named) {
     p <- p + ggplot2::scale_shape_manual(values = point.shape)
+  }
+  
+  if (linetype_named) {
+    p <- p + ggplot2::scale_linetype_manual(values = line.linetype)
   }
   
   p

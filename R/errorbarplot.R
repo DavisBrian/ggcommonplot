@@ -137,3 +137,36 @@ ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group
            point = TRUE, point.size = 2L, point.color = api_colors,
            line  = TRUE, line.linetypegroup = name, line.linetype = api_lines)
 
+# Error Bar + Bar ------------------------------------------------------------
+ggerrorbar(dat, x = name, estimate = mean, ymin = lower, ymax = upper, group = use_type,
+           bar = TRUE)
+
+## Change the errobar.color to red bar should follow
+ggerrorbar(dat, x = name, estimate = mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "red",
+           bar = TRUE)
+
+## Change the errobar.color by group named vector, bar should follow
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = colors1,
+           bar = TRUE)
+
+## Change the errobar.color by group named vector, change bar.outline to "black"
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = colors1,
+           bar = TRUE, bar.outline = "black")
+
+## Change the errobar.color to "black", bar.outline should follow, change fill by group
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1)
+
+## Change the errobar.color to "black", change bar.outline to "red", change fill by group
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.outline = "red", bar.fill = colors1)
+
+## Change the errobar.color to "black", bar.outline should follow, change fill by group, change linetype
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1, bar.linetype = "dashed")

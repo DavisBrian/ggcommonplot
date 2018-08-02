@@ -11,11 +11,12 @@ ggerrorbar <- function(data,
                      errorbar.color = "black",
                      errorbar.width = 0.5,
                      errorbar.alpha = 1,
-                     bar.width = 0.75,
-                     bar.color = NULL,
-                     bar.outline = NULL,
-                     bar.size = .5,
                      bar.alpha = 1,
+                     bar.outline = errorbar.color,
+                     bar.fill = errorbar.color,
+                     bar.linetype = 1,
+                     bar.size = .5,
+                     bar.width = 0.75,
                      point.size = 0.5,
                      point.shape = 16,
                      point.shapegroup = NULL,      
@@ -72,6 +73,9 @@ ggerrorbar <- function(data,
   line_color_named     <- !is.null(names(line.color))
   linetype_named       <- !is.null(names(line.linetype))
   
+  bar_fill_named       <- !is.null(names(bar.fill))
+  bar_outline_named    <- !is.null(names(bar.outline))
+  
   # Plot Set up ----------------------------------------------------------------
   p <- ggplot2::ggplot(data,
                        aes(x     = !! x_quo, 
@@ -82,6 +86,47 @@ ggerrorbar <- function(data,
                   title   = title,
                   caption = caption) +
     ggplot2::scale_y_continuous(expand = c(0,0))   # move the x axis to the plot bottom
+  
+  # Bar ------------------------------------------------------------------------
+  if(bar) {
+    if (bar_outline_named & bar_fill_named) {
+      p <- p + ggplot2::geom_col(aes(y     = !!est_quo,
+                                     color = !!group_quo,
+                                     fill  = !!group_quo),
+                                 position = position_dodge(dodge_width), 
+                                 width    = bar.width,
+                                 size     = bar.size,
+                                 alpha    = bar.alpha,
+                                 linetype = bar.linetype)
+    } else if (bar_outline_named & !bar_fill_named) {
+      p <- p + ggplot2::geom_col(aes(y     = !!est_quo,
+                                     color = !!group_quo),
+                                 position = position_dodge(dodge_width), 
+                                 width    = bar.width,
+                                 size     = bar.size,
+                                 alpha    = bar.alpha,
+                                 fill     = bar.fill,
+                                 linetype = bar.linetype)
+    } else if (!bar_outline_named & bar_fill_named) {
+      p <- p + ggplot2::geom_col(aes(y     = !!est_quo,
+                                     fill  = !!group_quo),
+                                 position = position_dodge(dodge_width), 
+                                 width    = bar.width,
+                                 size     = bar.size,
+                                 alpha    = bar.alpha,
+                                 color    = bar.outline,
+                                 linetype = bar.linetype)
+    } else {
+      p <- p + ggplot2::geom_col(aes(y = !!est_quo),
+                                 position = position_dodge(dodge_width), 
+                                 width    = bar.width,
+                                 size     = bar.size,
+                                 alpha    = bar.alpha,
+                                 color    = bar.outline,
+                                 fill     = bar.fill,
+                                 linetype = bar.linetype)    
+    }
+  }
     
   # Error Bar ------------------------------------------------------------------
   # if the a named vector is used for the errorbar.color use scale_color_manual
@@ -195,6 +240,8 @@ ggerrorbar <- function(data,
     p <- p + ggplot2::scale_color_manual(values = point.color)
   } else if (length(errorbar.color) == 1L & line_color_named) {
     p <- p + ggplot2::scale_color_manual(values = line.color)
+  } else if (length(errorbar.color) == 1L & bar_outline_named) {
+    p <- p + ggplot2::scale_color_manual(values = bar.outline)
   }
   
   if (point_shape_named) {
@@ -203,6 +250,10 @@ ggerrorbar <- function(data,
   
   if (linetype_named) {
     p <- p + ggplot2::scale_linetype_manual(values = line.linetype)
+  }
+  
+  if (bar_fill_named) {
+    p <- p + ggplot2::scale_fill_manual(values = bar.fill)
   }
   
   p

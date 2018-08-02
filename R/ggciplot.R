@@ -2,12 +2,7 @@ library(tidyverse)
 library(scales)
 library(rlang)
 
-# TBD
-# -    Function for labels
-# -    Legend
-# -    rotate x/y text
-# -    y-axis to the top
-# -    commas, $, % in axis labels
+
 # Error bar
 # -    ???
 # Points

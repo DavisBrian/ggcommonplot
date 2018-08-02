@@ -72,4 +72,4 @@ ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = us
            errorbar.color = "black",
            point = TRUE, point.size = 2L, point.color = colors1, point.shape = shape1, point.shapegroup = use_type)
 
-# Error Bar + Point + Line
+# Error Bar + Point + Line -----------------------------------------------------

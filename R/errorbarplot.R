@@ -2,7 +2,7 @@ library(tidyverse)
 library(scales)
 library(rlang)
 
-
+source("./R/ggerrorbar.R")
 # Load the data ----------------------------------------------------------------
 dat <- readRDS("./data/cidat1.RDS")
 

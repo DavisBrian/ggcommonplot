@@ -35,13 +35,21 @@ ggerrorbar <- function(data,
                        line.linetype = "solid",
                        line.linetypegroup = NULL,
                        line.size  = .5,
-                       xlab = NULL,
-                       ylab = NULL,
-                       caption = NULL,
-                       title = NULL,
+                       xlab     = NULL,
+                       ylab     = NULL,
+                       caption  = NULL,
+                       title    = NULL,
+                       subtitle = NULL,
                        point = FALSE,
                        bar   = FALSE,
-                       line  = FALSE) {
+                       line  = FALSE,
+                       scale.y.name   = NULL,
+                       scale.y.breaks = waiver(),
+                       scale.y.limits = NULL, 
+                       scale.y.label  = waiver(),
+                       scale.y.trans  = NULL,
+                       scale.y.expand = c(0,0),
+                       theme = NULL) {
   
   # take unquoted column names and make variables -----------------------------
   x_quo    <- rlang::enquo(x)
@@ -87,11 +95,11 @@ ggerrorbar <- function(data,
                        aes(x     = !! x_quo, 
                            y     = !! ymax_quo, 
                            group = !! group_quo)) +
-    ggplot2::labs(x       = xlab,
-                  y       = ylab,
-                  title   = title,
-                  caption = caption) +
-    ggplot2::scale_y_continuous(expand = c(0,0))   # move the x axis to the plot bottom
+    ggplot2::labs(x        = xlab,
+                  y        = ylab,
+                  title    = title,
+                  subtitle = subtitle,
+                  caption  = caption) 
   
   # Bar ------------------------------------------------------------------------
   if(bar) {
@@ -239,7 +247,7 @@ ggerrorbar <- function(data,
     
   }
   
-  
+  # Named colors ---------------------------------------------------------------
   if (errorbar_color_named) {
     p <- p + ggplot2::scale_color_manual(values = errorbar.color)
   } else if (length(errorbar.color) == 1L & point_color_named) {
@@ -250,16 +258,42 @@ ggerrorbar <- function(data,
     p <- p + ggplot2::scale_color_manual(values = bar.outline)
   }
   
+  # Named point shapes ---------------------------------------------------------
   if (point_shape_named) {
     p <- p + ggplot2::scale_shape_manual(values = point.shape)
   }
   
+  # Named linetypes ------------------------------------------------------------
   if (linetype_named) {
     p <- p + ggplot2::scale_linetype_manual(values = line.linetype)
   }
   
+  # Named bar fill colors ------------------------------------------------------
   if (bar_fill_named) {
     p <- p + ggplot2::scale_fill_manual(values = bar.fill)
+  }
+  
+  # scale_y_continuous ---------------------------------------------------------
+  # Y label defaults -----------------------------------------------------------
+  if (is.null(scale.y.limits)) {
+    y <- pretty(pull(data, !!ymax_quo))
+    gap <- 10^(ceiling(log10(max(y))) -1L)
+    scale.y.limits <- c(0, max(y))
+    scale.y.breaks <- seq(0, max(y), by = gap)
+    scale.y.label <- scale.y.breaks
+    
+    # scale.y.expand <-  c(min(y), max(y))
+  }
+
+  p <- p + scale_y_continuous(expand = scale.y.expand,
+                              breaks = scale.y.breaks, 
+                              label  = scale.y.label, 
+                              limits = scale.y.limits)
+
+  
+  # add theme ------------------------------------------------------------------
+  if (!is.null(theme)) {
+    p <- p + theme
   }
   
   p

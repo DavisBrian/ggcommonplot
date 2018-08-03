@@ -170,3 +170,57 @@ ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = us
 ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
            errorbar.color = "black",
            bar = TRUE, bar.fill = colors1, bar.linetype = "dashed")
+
+# Themes -----------------------------------------------------------------------
+## Change the errobar.color to "black", bar.outline should follow, change fill by group
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1)
+
+## theme_minimal()
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1,
+           theme = theme_minimal())
+
+# Y scale ----------------------------------------------------------------------
+source("./R/ggerrorbar.R")
+
+# default limits have the max above the highest upper limit???
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1,
+           theme = theme_minimal())
+
+# set the default to a specfic range
+ggerrorbar(dat, x = name, estimate= mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "black",
+           bar = TRUE, bar.fill = colors1,
+           theme = theme_minimal(), scale.y.limits = c(0, 60))
+
+
+## change point.color by api color, line.color should follow, change linetype based on group
+ggerrorbar(dat, x = use_type, estimate = mean, ymin = lower, ymax = upper, group = name, 
+           point = TRUE, point.size = 2L, point.color = api_colors,
+           line  = TRUE, line.linetypegroup = name, line.linetype = api_lines)
+
+# Another data set
+dat2 <- readRDS("./data/cidat2.RDS")
+
+## Change the color to red
+ggerrorbar(dat2, x = name, estimate = mean, ymin = lower, ymax = upper, group = use_type,
+           errorbar.color = "red")
+
+# Another data set
+dat3 <- readRDS("./data/cidat3.RDS")
+
+## change point.color by api color, line.color should follow, change linetype based on group
+ggerrorbar(dat3, x = var, estimate = mean, ymin = lower, ymax = upper, group = use_type)
+
+# and Yet Another data set
+dat4 <- readRDS("./data/cidat4.RDS")
+
+## change point.color by api color, line.color should follow, change linetype based on group
+ggerrorbar(dat4, x = name, estimate = mean, ymin = lower, ymax = upper, group = use_type, 
+           bar = TRUE, bar.fill = c("nmu" = "blue", "nmu_nty" = "cornflowerblue", "nmu_yr" = "lightblue"))
+
